@@ -1,6 +1,24 @@
-version: '3'
+version: '3.9'
 services:
   test-backend:
     build: ./backend
+    volumes:
+      - ./backend:/usr/src/app
     ports:
       - "8080:8080"
+    tty: true
+    depends_on:
+      # TODO conditionをつける
+      - test-postgres
+
+  test-postgres:
+    restart: always
+    image: postgres:latest
+    environment:
+    # if not POSTGRES_USER and POSTGRES_DB, it will be "postgres".
+      POSTGRES_PASSWORD: password
+      TZ: "Asia/Tokyo"
+    ports:
+      - 5432:5432
+    volumes:
+      - ./tmp/db:/var/lib/postgresql/data
