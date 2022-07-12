@@ -5,17 +5,21 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/gorilla/mux"
 )
 
 func main() {
 
-	m := http.NewServeMux()
+	r := mux.NewRouter()
 
-	m.HandleFunc("/", index)
+	// m := http.NewServeMux()
+
+	r.HandleFunc("/", index)
 
 	s := &http.Server{
 		Addr:           ":8080",
-		Handler:        m,
+		Handler:        r,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,
 		MaxHeaderBytes: 1 << 20,
