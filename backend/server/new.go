@@ -4,13 +4,12 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/yoshi429/test/model"
+	"github.com/yoshi429/test/config"
 	"github.com/yoshi429/test/router"
 )
 
-func New() *http.Server {
-	d := model.New()
-	r := router.New(d)
+func New(conf config.Configs) *http.Server {
+	r := router.New(conf)
 
 	return &http.Server{
 		Addr:           ":8080",

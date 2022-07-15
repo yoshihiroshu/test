@@ -16,10 +16,10 @@ type Context struct {
 	Logger *log.Logger
 }
 
-func NewContext(db *model.DBContext) *Context {
+func NewContext(conf config.Configs) *Context {
 	return &Context{
-		Db:     db,
-		conf:   config.New(),
+		Db:     model.New(conf),
+		conf:   conf,
 		Logger: log.New(os.Stdout, "", log.LstdFlags),
 	}
 }
