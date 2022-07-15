@@ -16,9 +16,12 @@ func New(db *model.DBContext) http.Handler {
 
 	ih := &handler.IndexHandler{}
 
-	r.HandleFunc("/", ih.Index)
+	r.Use(rc.TestMiddleware)
 
-	r.HandleFunc("/test", rc.Handler(ih.TestHandler))
+	r.HandleFunc("/", ih.Index).Methods(http.MethodGet)
+
+	t := r.PathPrefix("/test").Subrouter()
+	t.HandleFunc("", rc.Handler(ih.TestHandler)).Methods(http.MethodGet)
 
 	return r
 }

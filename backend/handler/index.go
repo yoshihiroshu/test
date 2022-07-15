@@ -17,5 +17,5 @@ func (h IndexHandler) TestHandler(w http.ResponseWriter, r *http.Request, rc req
 	fmt.Println("UNKOOOOO")
 	fmt.Printf("RequestContext: %#v\n", rc)
 	fmt.Fprintf(w, "RequestContext: %#v\n", rc)
-	fmt.Println("UNKOOOOO", rc.GetConfig().GetDb().Driver)
+	fmt.Println("UNKOOOOO")
 }
