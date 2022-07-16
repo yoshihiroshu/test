@@ -11,17 +11,16 @@ import (
 
 type DBContext struct {
 	DB *sql.DB
-	// TODO redisなど追加
 }
 
 func New(conf config.Configs) *DBContext {
-
 	db, err := GetDBConnection(conf.GetDb())
 	if err != nil {
 		log.Fatalf("Failed Connect with PostgresDB. err: %s", err.Error())
 	}
-
-	return &DBContext{DB: db}
+	return &DBContext{
+		DB: db,
+	}
 }
 
 func GetDBConnection(c config.DB) (*sql.DB, error) {

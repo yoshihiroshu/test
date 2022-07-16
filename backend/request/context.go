@@ -6,12 +6,14 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/yoshi429/test/cache"
 	"github.com/yoshi429/test/config"
 	"github.com/yoshi429/test/model"
 )
 
 type Context struct {
 	Db     *model.DBContext
+	Cache  *cache.RedisContext
 	conf   config.Configs
 	Logger *log.Logger
 }
@@ -19,6 +21,7 @@ type Context struct {
 func NewContext(conf config.Configs) *Context {
 	return &Context{
 		Db:     model.New(conf),
+		Cache:  cache.New(conf),
 		conf:   conf,
 		Logger: log.New(os.Stdout, "", log.LstdFlags),
 	}

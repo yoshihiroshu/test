@@ -10,6 +10,9 @@ services:
     depends_on:
       # TODO conditionをつける
       - test-postgres
+      - test-redis
+    networks:
+      - test-backend
 
   test-postgres:
     restart: always
@@ -22,3 +25,20 @@ services:
       - 5432:5432
     volumes:
       - ./tmp/db:/var/lib/postgresql/data
+    networks:
+      - test-backend
+
+  test-redis:
+    restart: always
+    image: "redis:latest"
+    ports:
+      - 6379:6379
+    volumes:
+      - ./tmp/cache:/var/lib/redis/data
+    networks:
+      - test-backend
+
+networks:
+  test-backend:
+    driver: bridge
+    external: true
