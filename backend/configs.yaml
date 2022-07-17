@@ -1,7 +1,9 @@
 db:
   driver: "postgres"
-  host: "127.0.0.1"
+  # host: "127.0.0.1"
+  host: "test-postgres"
   port: "5432"
   user: "postgres"
   name: "postgres"
+  password: "password"
   sslMode: "disable"

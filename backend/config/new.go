@@ -12,12 +12,13 @@ type Configs struct {
 }
 
 type DB struct {
-	Driver  string `yaml:"driver"`
-	Host    string `yaml:"host"`
-	Port    string `yaml:"port"`
-	User    string `yaml:"user"`
-	Name    string `yaml:"name"`
-	Sslmode string `yaml:"sslMode"`
+	Driver   string `yaml:"driver"`
+	Host     string `yaml:"host"`
+	Port     string `yaml:"port"`
+	User     string `yaml:"user"`
+	Name     string `yaml:"name"`
+	Password string `yaml:"password"`
+	Sslmode  string `yaml:"sslMode"`
 }
 
 func New() Configs {

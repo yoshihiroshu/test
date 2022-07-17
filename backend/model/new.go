@@ -10,7 +10,10 @@ import (
 )
 
 type DBContext struct {
-	DB *sql.DB
+	PSQLDB *sql.DB
+	// TODO
+	// ReadDb  *[]sql.DB
+	// WriteDb *[]sql.DB
 }
 
 func New(conf config.Configs) *DBContext {
@@ -19,7 +22,7 @@ func New(conf config.Configs) *DBContext {
 		log.Fatalf("Failed Connect with PostgresDB. err: %s", err.Error())
 	}
 	return &DBContext{
-		DB: db,
+		PSQLDB: db,
 	}
 }
 
@@ -33,6 +36,6 @@ func GetDBConnection(c config.DB) (*sql.DB, error) {
 }
 
 func getDbDNS(c config.DB) string {
-	return fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=%s",
-		c.Host, c.Port, c.User, c.Name, c.Sslmode)
+	return fmt.Sprintf("host=%s port=%s user=%s dbname=%s password=%s sslmode=%s",
+		c.Host, c.Port, c.User, c.Name, c.Password, c.Sslmode)
 }
