@@ -7,3 +7,9 @@ db:
   name: "postgres"
   password: "password"
   sslMode: "disable"
+
+cacheRedis:
+  host: "test-redis"
+  port: "6379"
+  password: ""
+  dbNumber: 0

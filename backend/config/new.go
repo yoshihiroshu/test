@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"log"
 	"os"
 
@@ -8,7 +9,8 @@ import (
 )
 
 type Configs struct {
-	Db DB `yaml:"db"`
+	Db         DB         `yaml:"db"`
+	CacheRedis RedisCache `yaml:"cacheRedis"`
 }
 
 type DB struct {
@@ -19,6 +21,13 @@ type DB struct {
 	Name     string `yaml:"name"`
 	Password string `yaml:"password"`
 	Sslmode  string `yaml:"sslMode"`
+}
+
+type RedisCache struct {
+	Host     string `yaml:"host"`
+	Port     string `yaml:"port"`
+	Password string `yaml:"password"`
+	DbNumber int    `yaml:"dbNumber"`
 }
 
 func New() Configs {
@@ -38,4 +47,12 @@ func New() Configs {
 
 func (c Configs) GetDb() DB {
 	return c.Db
+}
+
+func (c Configs) GetCacheRedis() RedisCache {
+	return c.CacheRedis
+}
+
+func (c Configs) GetRedisDNS() string {
+	return fmt.Sprintf("%s:%s", c.CacheRedis.Host, c.CacheRedis.Port)
 }
