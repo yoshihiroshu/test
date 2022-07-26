@@ -7,15 +7,17 @@ import (
 	"github.com/yoshi429/test/request"
 )
 
-type IndexHandler struct{}
+type Handler struct {
+	Context *request.Context
+}
 
-func (h IndexHandler) Index(w http.ResponseWriter, r *http.Request) {
+func (h Handler) Index(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Hello - WORLD")
 }
 
-func (h IndexHandler) TestHandler(w http.ResponseWriter, r *http.Request, rc request.Context) {
+func (h Handler) TestHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("UNKOOOOO")
-	fmt.Printf("RequestContext: %#v\n", rc)
-	fmt.Fprintf(w, "RequestContext: %#v\n", rc)
+	fmt.Printf("RequestContext: %#v\n", h.Context)
+	fmt.Fprintf(w, "RequestContext: %#v\n", h.Context)
 	fmt.Println("UNKOOOOO")
 }

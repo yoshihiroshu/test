@@ -35,6 +35,7 @@ func (c Context) GetConfig() config.Configs {
 	return c.conf
 }
 
+// 廃止
 func (c Context) Handler(next func(http.ResponseWriter, *http.Request, Context)) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		next(w, r, c)

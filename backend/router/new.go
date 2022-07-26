@@ -14,14 +14,16 @@ func New(conf config.Configs) http.Handler {
 
 	rc := request.NewContext(conf)
 
-	ih := &handler.IndexHandler{}
+	h := handler.Handler{
+		Context: rc,
+	}
 
 	r.Use(rc.TestMiddleware)
 
-	r.HandleFunc("/", ih.Index).Methods(http.MethodGet)
+	r.HandleFunc("/", h.Index).Methods(http.MethodGet)
 
 	t := r.PathPrefix("/test").Subrouter()
-	t.HandleFunc("", rc.Handler(ih.TestHandler)).Methods(http.MethodGet)
+	t.HandleFunc("", h.TestHandler).Methods(http.MethodGet)
 
 	return r
 }
