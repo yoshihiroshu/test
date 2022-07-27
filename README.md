@@ -23,3 +23,9 @@ docker network create test-backend-network
 ```
 docker-compose up -d
 ```
+
+確認
+
+```
+curl localhost:80/
+```
