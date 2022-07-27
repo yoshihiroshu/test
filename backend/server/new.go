@@ -12,7 +12,7 @@ func New(conf config.Configs) *http.Server {
 	r := router.New(conf)
 
 	return &http.Server{
-		Addr:           ":8080",
+		Addr:           conf.GetUserAddr(),
 		Handler:        r,
 		ReadTimeout:    10 * time.Second,
 		WriteTimeout:   10 * time.Second,

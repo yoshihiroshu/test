@@ -5,7 +5,7 @@ services:
     volumes:
       - ./backend:/usr/src/app
     ports:
-      - "8080:8080"
+      - "8000:8000"
     tty: true
     depends_on:
       # TODO conditionをつける

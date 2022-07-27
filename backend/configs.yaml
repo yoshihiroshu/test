@@ -1,3 +1,6 @@
+user:
+  port: 8000
+
 db:
   driver: "postgres"
   # host: "127.0.0.1"

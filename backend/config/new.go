@@ -9,8 +9,13 @@ import (
 )
 
 type Configs struct {
+	User       User       `yaml:"user"`
 	Db         DB         `yaml:"db"`
 	CacheRedis RedisCache `yaml:"cacheRedis"`
+}
+
+type User struct {
+	Port string `yaml:"port"`
 }
 
 type DB struct {
@@ -55,4 +60,8 @@ func (c Configs) GetCacheRedis() RedisCache {
 
 func (c Configs) GetRedisDNS() string {
 	return fmt.Sprintf("%s:%s", c.CacheRedis.Host, c.CacheRedis.Port)
+}
+
+func (c Configs) GetUserAddr() string {
+	return fmt.Sprintf(":%s", c.User.Port)
 }
