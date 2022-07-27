@@ -1,5 +1,14 @@
 version: '3.9'
 services:
+  test-nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+    depends_on:
+      - test-backend
+    networks:
+      - test-backend-network
+
   test-backend:
     build: ./backend
     volumes:
@@ -12,7 +21,7 @@ services:
       - test-postgres
       - test-redis
     networks:
-      - test-backend
+      - test-backend-network
 
   test-postgres:
     restart: always
@@ -26,7 +35,7 @@ services:
     volumes:
       - ./tmp/db:/var/lib/postgresql/data
     networks:
-      - test-backend
+      - test-backend-network
 
   test-redis:
     restart: always
@@ -36,9 +45,9 @@ services:
     volumes:
       - ./tmp/cache:/var/lib/redis/data
     networks:
-      - test-backend
+      - test-backend-network
 
 networks:
-  test-backend:
+  test-backend-network:
     driver: bridge
     external: true
