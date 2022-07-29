@@ -1,7 +1,8 @@
 package request
 
 import (
-	"fmt"
+	"encoding/json"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -27,17 +28,13 @@ func NewContext(conf config.Configs) *Context {
 	}
 }
 
-// 廃止
-func (c Context) Handler(next func(http.ResponseWriter, *http.Request, Context)) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		next(w, r, c)
-	}
-}
+func (c Context) UnmarshalFromRequest(r *http.Request, i interface{}) error {
+	defer r.Body.Close()
 
-func (c Context) TestMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		c.Logger.Println("url:", r.URL)
-		fmt.Fprintln(w, "url:", r.URL)
-		next.ServeHTTP(w, r)
-	})
+	body, err := ioutil.ReadAll(r.Body)
+	if err != nil {
+		return err
+	}
+
+	return json.Unmarshal(body, i)
 }
