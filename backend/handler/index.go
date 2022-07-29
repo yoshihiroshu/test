@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/yoshi429/test/request"
@@ -9,6 +10,10 @@ import (
 
 type Handler struct {
 	Context *request.Context
+}
+
+func (h Handler) Logger() *log.Logger {
+	return h.Context.Logger
 }
 
 func (h Handler) Index(w http.ResponseWriter, r *http.Request) {
