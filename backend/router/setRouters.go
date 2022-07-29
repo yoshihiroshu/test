@@ -20,4 +20,7 @@ func ApplyRouters(r *mux.Router, rc *request.Context) {
 
 	c := r.PathPrefix("/cmd").Subrouter()
 	c.HandleFunc("", h.Command).Methods(http.MethodGet)
+
+	user := r.PathPrefix("/user").Subrouter()
+	user.HandleFunc("/register", h.RegisterAccount).Methods(http.MethodPost)
 }

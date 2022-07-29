@@ -40,6 +40,9 @@ goose create create_user sql
 ```
 
 実行
+
 ```
 GOOSE_DRIVER=postgres GOOSE_DBSTRING="host=localhost port=5432 user=postgres dbname=postgres password=password sslmode=disable" goose up
 ```
+
+実行後自動的にgoose-veserion更新される
