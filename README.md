@@ -29,3 +29,17 @@ docker-compose up -d
 ```
 curl localhost:80/
 ```
+
+## gooose
+
+ファイルのフォーマットを作成、編集
+
+```
+cd backend/db/migrations
+goose create create_user sql
+```
+
+実行
+```
+GOOSE_DRIVER=postgres GOOSE_DBSTRING="host=localhost port=5432 user=postgres dbname=postgres password=password sslmode=disable" goose up
+```
