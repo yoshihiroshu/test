@@ -1,7 +1,6 @@
 package request
 
 import (
-	"io"
 	"log"
 	"net/http"
 	"os"
@@ -14,7 +13,7 @@ import (
 type Context struct {
 	Db     *model.DBContext
 	Cache  *cache.RedisContext
-	conf   config.Configs
+	Conf   config.Configs
 	Logger *log.Logger
 }
 
@@ -22,17 +21,9 @@ func NewContext(conf config.Configs) *Context {
 	return &Context{
 		Db:     model.New(conf),
 		Cache:  cache.New(conf),
-		conf:   conf,
+		Conf:   conf,
 		Logger: log.New(os.Stdout, "", log.LstdFlags),
 	}
-}
-
-func (c Context) NewLogger(w io.Writer, s string, i int) {
-	c.Logger = log.New(w, s, i)
-}
-
-func (c Context) GetConfig() config.Configs {
-	return c.conf
 }
 
 // 廃止
