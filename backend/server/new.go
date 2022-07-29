@@ -1,6 +1,7 @@
 package server
 
 import (
+	"log"
 	"net/http"
 	"time"
 
@@ -8,14 +9,26 @@ import (
 	"github.com/yoshi429/test/router"
 )
 
-func New(conf config.Configs) *http.Server {
+type Server struct {
+	*http.Server
+}
+
+func New(conf config.Configs) *Server {
 	r := router.New(conf)
 
-	return &http.Server{
-		Addr:           conf.GetUserAddr(),
-		Handler:        r,
-		ReadTimeout:    10 * time.Second,
-		WriteTimeout:   10 * time.Second,
-		MaxHeaderBytes: 1 << 20,
+	r.ApplyRouters()
+
+	return &Server{
+		Server: &http.Server{
+			Addr:           conf.GetUserAddr(),
+			Handler:        r,
+			ReadTimeout:    10 * time.Second,
+			WriteTimeout:   10 * time.Second,
+			MaxHeaderBytes: 1 << 20,
+		},
 	}
+}
+
+func (s Server) Start() {
+	log.Fatalln(s.ListenAndServe())
 }
