@@ -40,6 +40,14 @@ func (u *User) SetBcryptPassword() error {
 	return nil
 }
 
+func (u *User) VerifyPassword(hash string) error {
+	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(u.Password))
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func (u *User) Insert(db *sql.DB) error {
 	// TODO Tranzaction 対応
 	cmd := `INSERT INTO users (name, password, email) VALUES(

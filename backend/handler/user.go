@@ -6,7 +6,6 @@ import (
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/yoshi429/test/model"
-	"golang.org/x/crypto/bcrypt"
 )
 
 func (h Handler) SignUp(w http.ResponseWriter, r *http.Request) error {
@@ -85,7 +84,7 @@ func (h Handler) Login(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	// compare password and crypt password
-	err = bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(user.Password))
+	err = user.VerifyPassword(hashedPassword)
 	if err != nil {
 		return h.Context.JSON(w, http.StatusNotFound, "password is mistaken")
 	}
