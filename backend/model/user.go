@@ -7,6 +7,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
@@ -28,6 +29,15 @@ func (u *User) SetCreateAt(date string) {
 	}
 	fmt.Println("setCreatedAt: ", createdAt)
 	u.CreatedAt = createdAt
+}
+
+func (u *User) SetBcryptPassword() error {
+	hash, err := bcrypt.GenerateFromPassword([]byte(u.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return err
+	}
+	u.Password = string(hash)
+	return nil
 }
 
 func (u *User) Insert(db *sql.DB) error {
@@ -134,4 +144,27 @@ func (u *User) GetByUUID(db *sql.DB) error {
 	u.SetCreateAt(createdAt)
 
 	return nil
+}
+
+func (u *User) GetPasswordByEmail(db *sql.DB) (string, error) {
+	cmd := `SELECT password FROM users WHERE email = $1;`
+
+	stmt, err := db.Prepare(cmd)
+	if err != nil {
+		return "", err
+	}
+	defer stmt.Close()
+
+	row := stmt.QueryRow(u.Email)
+	if err != nil {
+		return "", err
+	}
+
+	var password string
+	err = row.Scan(&password)
+	if err != nil {
+		return "", err
+	}
+
+	return password, nil
 }

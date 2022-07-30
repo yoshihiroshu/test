@@ -6,15 +6,18 @@ import (
 	"github.com/google/uuid"
 	"github.com/gorilla/mux"
 	"github.com/yoshi429/test/model"
+	"golang.org/x/crypto/bcrypt"
 )
 
-func (h Handler) RegisterAccount(w http.ResponseWriter, r *http.Request) error {
+func (h Handler) SignUp(w http.ResponseWriter, r *http.Request) error {
 
 	var user model.User
 	err := h.Context.UnmarshalFromRequest(r, &user)
 	if err != nil {
 		return h.Context.JSON(w, http.StatusBadRequest, err.Error())
 	}
+
+	user.SetBcryptPassword()
 
 	err = user.Insert(h.Context.Db.PSQLDB)
 	if err != nil {
@@ -65,4 +68,27 @@ func (h Handler) GetUserBYID(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	return h.Context.JSON(w, http.StatusOK, user)
+}
+
+func (h Handler) Login(w http.ResponseWriter, r *http.Request) error {
+
+	var user model.User
+	err := h.Context.UnmarshalFromRequest(r, &user)
+	if err != nil {
+		return h.Context.JSON(w, http.StatusBadRequest, err.Error())
+	}
+
+	// get password by user.email
+	hashedPassword, err := user.GetPasswordByEmail(h.Context.Db.PSQLDB)
+	if err != nil {
+		return h.Context.JSON(w, http.StatusBadRequest, err.Error())
+	}
+
+	// compare password and crypt password
+	err = bcrypt.CompareHashAndPassword([]byte(hashedPassword), []byte(user.Password))
+	if err != nil {
+		return h.Context.JSON(w, http.StatusNotFound, "password is mistaken")
+	}
+	// set cookie
+	return h.Context.JSON(w, http.StatusOK, "LOGIN!!!")
 }
