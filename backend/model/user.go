@@ -30,7 +30,7 @@ func (u *User) SetCreateAt(date string) {
 	u.CreatedAt = createdAt
 }
 
-func (u User) Insert(db *sql.DB) error {
+func (u *User) Insert(db *sql.DB) error {
 	// TODO Tranzaction 対応
 	cmd := `INSERT INTO users (name, password, email) VALUES(
 		$1, $2, $3)RETURNING id;`
@@ -51,7 +51,7 @@ func (u User) Insert(db *sql.DB) error {
 	return nil
 }
 
-func (u User) GetAll(db *sql.DB) ([]User, error) {
+func (u *User) GetAll(db *sql.DB) ([]User, error) {
 	cmd := `SELECT * FROM users LIMIT 10;`
 
 	stmt, err := db.Prepare(cmd)
@@ -84,4 +84,54 @@ func (u User) GetAll(db *sql.DB) ([]User, error) {
 	}
 
 	return users, nil
+}
+
+func (u *User) GetByEmail(db *sql.DB) error {
+	cmd := `SELECT * FROM users WHERE email = $1`
+
+	stmt, err := db.Prepare(cmd)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	row := stmt.QueryRow(u.Email)
+	if err != nil {
+		return err
+	}
+
+	var id, createdAt string
+	err = row.Scan(&id, &u.Name, &u.Password, &u.Email, &createdAt)
+	if err != nil {
+		return err
+	}
+	u.SetUUID(id)
+	u.SetCreateAt(createdAt)
+
+	return nil
+}
+
+func (u *User) GetByUUID(db *sql.DB) error {
+	cmd := `SELECT * FROM users WHERE id = $1`
+
+	stmt, err := db.Prepare(cmd)
+	if err != nil {
+		return err
+	}
+	defer stmt.Close()
+
+	row := stmt.QueryRow(u.ID)
+	if err != nil {
+		return err
+	}
+
+	var id, createdAt string
+	err = row.Scan(&id, &u.Name, &u.Password, &u.Email, &createdAt)
+	if err != nil {
+		return err
+	}
+	u.SetUUID(id)
+	u.SetCreateAt(createdAt)
+
+	return nil
 }

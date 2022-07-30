@@ -33,8 +33,10 @@ func (r Router) ApplyRouters() {
 	c := r.Group("/cmd")
 	c.AppHandle("", h.Command).Methods(http.MethodGet)
 
-	user := r.Group("/user")
+	user := r.Group("/users")
 	user.AppHandle("", h.GetUsers).Methods(http.MethodGet)
+	user.AppHandle("/{id}", h.GetUserBYID).Methods(http.MethodGet)
+	user.AppHandle("/login", h.GetUserBYEmail).Methods(http.MethodPost)
 	user.AppHandle("/register", h.RegisterAccount).Methods(http.MethodPost)
 	// user.HandleFunc("/register", h.RegisterAccount).Methods(http.MethodPost)
 
