@@ -5,14 +5,12 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/yoshi429/test/config"
-	"github.com/yoshi429/test/handler"
 	"github.com/yoshi429/test/request"
 )
 
 type Router struct {
 	*mux.Router
-	Context    *request.Context
-	AppHandler func(w http.ResponseWriter, r *http.Request) error
+	Context *request.Context
 }
 
 func New(conf config.Configs) *Router {
@@ -22,23 +20,12 @@ func New(conf config.Configs) *Router {
 	}
 }
 
-func (r Router) ApplyRouters() {
-	rc := r.Context
+func (r Router) Group(path string) Router {
+	r.Router = r.PathPrefix(path).Subrouter()
+	return r
+}
 
-	r.Use(rc.TestMiddleware)
-
-	h := handler.Handler{
-		Context: rc,
-	}
-
-	r.HandleFunc("/", h.Index).Methods(http.MethodGet)
-
-	t := r.PathPrefix("/test").Subrouter()
-	t.HandleFunc("", h.TestHandler).Methods(http.MethodGet)
-
-	c := r.PathPrefix("/cmd").Subrouter()
-	c.HandleFunc("", h.Command).Methods(http.MethodGet)
-
-	user := r.PathPrefix("/user").Subrouter()
-	user.HandleFunc("/register", h.RegisterAccount).Methods(http.MethodPost)
+func (r Router) AppHandle(path string, fn func(http.ResponseWriter, *http.Request) error) Router {
+	r.Router.Handle(path, AppHandler(fn))
+	return r
 }

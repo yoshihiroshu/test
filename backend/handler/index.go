@@ -11,13 +11,14 @@ type Handler struct {
 	Context *request.Context
 }
 
-func (h Handler) Index(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hello - WORLD")
+func (h Handler) Index(w http.ResponseWriter, r *http.Request) error {
+	return h.Context.JSON(w, http.StatusOK, "HELLO WORLD")
 }
 
-func (h Handler) TestHandler(w http.ResponseWriter, r *http.Request) {
+func (h Handler) TestHandler(w http.ResponseWriter, r *http.Request) error {
 	fmt.Println("UNKOOOOO")
 	fmt.Printf("RequestContext: %#v\n", h.Context)
 	fmt.Fprintf(w, "RequestContext: %#v\n", h.Context)
 	fmt.Println("UNKOOOOO")
+	return h.Context.JSON(w, http.StatusOK, h.Context)
 }

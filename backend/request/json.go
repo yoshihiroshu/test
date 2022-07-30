@@ -10,7 +10,7 @@ type JSONResponce struct {
 	Data   interface{} `json:"data"`
 }
 
-func (c Context) JSON(w http.ResponseWriter, status int, data interface{}) {
+func (c Context) JSON(w http.ResponseWriter, status int, data interface{}) error {
 	res := JSONResponce{
 		Status: status,
 		Data:   data,
@@ -19,9 +19,11 @@ func (c Context) JSON(w http.ResponseWriter, status int, data interface{}) {
 	b, err := json.Marshal(res)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
+		return nil
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(b)
+
+	return nil
 }
