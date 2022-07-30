@@ -13,25 +13,27 @@ func (r Router) ApplyRouters() {
 		Context: r.Context,
 	}
 
-	r.Handle("/", AppHandler(h.Index)).Methods(http.MethodGet)
-
-	t := r.PathPrefix("/test").Subrouter()
-	t.Handle("", AppHandler(h.TestHandler)).Methods(http.MethodGet)
-
-	c := r.PathPrefix("/cmd").Subrouter()
-	c.Handle("", AppHandler(h.Command)).Methods(http.MethodGet)
-
 	/*
-		r.AppHandle("/", h.Index).Methods(http.MethodGet)
+		r.Handle("/", AppHandler(h.Index)).Methods(http.MethodGet)
 
-		// Grouping
-		t := r.Group("/test")
-		t.AppHandle("", h.TestHandler).Methods(http.MethodGet)
+		t := r.PathPrefix("/test").Subrouter()
+		t.Handle("", AppHandler(h.TestHandler)).Methods(http.MethodGet)
 
-		c := r.Group("/cmd")
-		c.AppHandle("", h.Command).Methods(http.MethodGet)
-
-		user := r.Group("/user")
-		user.HandleFunc("/register", h.RegisterAccount).Methods(http.MethodPost)
+		c := r.PathPrefix("/cmd").Subrouter()
+		c.Handle("", AppHandler(h.Command)).Methods(http.MethodGet)
 	*/
+
+	r.AppHandle("/", h.Index).Methods(http.MethodGet)
+
+	// Grouping
+	t := r.Group("/test")
+	t.AppHandle("", h.TestHandler).Methods(http.MethodGet)
+	t.AppHandle("/v2", h.Index).Methods(http.MethodGet)
+
+	c := r.Group("/cmd")
+	c.AppHandle("", h.Command).Methods(http.MethodGet)
+
+	user := r.Group("/user")
+	user.HandleFunc("/register", h.RegisterAccount).Methods(http.MethodPost)
+
 }
