@@ -15,6 +15,7 @@ type Configs struct {
 }
 
 type User struct {
+	Host string `yaml:"host"`
 	Port string `yaml:"port"`
 }
 
@@ -63,5 +64,5 @@ func (c Configs) GetRedisDNS() string {
 }
 
 func (c Configs) GetUserAddr() string {
-	return fmt.Sprintf(":%s", c.User.Port)
+	return fmt.Sprintf("%s:%s", c.User.Host, c.User.Port)
 }

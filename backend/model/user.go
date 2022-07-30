@@ -31,6 +31,7 @@ func (u *User) SetCreateAt(date string) {
 }
 
 func (u User) Insert(db *sql.DB) error {
+	// TODO Tranzaction 対応
 	cmd := `INSERT INTO users (name, password, email) VALUES(
 		$1, $2, $3)RETURNING id;`
 
