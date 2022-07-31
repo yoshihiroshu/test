@@ -84,7 +84,7 @@ func (u *User) GetAll(db *sql.DB) ([]User, error) {
 	}
 	defer rows.Close()
 
-	users := make([]User, 10)
+	users := make([]User, 0)
 	for rows.Next() {
 		var id, createdAt string
 		var user User

@@ -14,17 +14,18 @@ type LoginResponse struct {
 }
 
 func (h Handler) SignUp(w http.ResponseWriter, r *http.Request) error {
+	name := r.FormValue("name")
+	email := r.FormValue("email")
+	password := r.FormValue("password")
 
-	// TODO FIX POST FORM
-	var user model.User
-	err := h.Context.UnmarshalFromRequest(r, &user)
-	if err != nil {
-		return h.Context.JSON(w, http.StatusBadRequest, err.Error())
+	user := model.User{
+		Name:     name,
+		Email:    email,
+		Password: password,
 	}
-
 	user.SetBcryptPassword()
 
-	err = user.Insert(h.Context.Db.PSQLDB)
+	err := user.Insert(h.Context.Db.PSQLDB)
 	if err != nil {
 		return h.Context.JSON(w, http.StatusInternalServerError, err.Error())
 	}
