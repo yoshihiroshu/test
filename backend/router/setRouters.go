@@ -3,6 +3,7 @@ package router
 import (
 	"net/http"
 
+	"github.com/yoshi429/test/auth"
 	"github.com/yoshi429/test/handler"
 )
 
@@ -12,16 +13,6 @@ func (r Router) ApplyRouters() {
 	h := handler.Handler{
 		Context: r.Context,
 	}
-
-	/*
-		r.Handle("/", AppHandler(h.Index)).Methods(http.MethodGet)
-
-		t := r.PathPrefix("/test").Subrouter()
-		t.Handle("", AppHandler(h.TestHandler)).Methods(http.MethodGet)
-
-		c := r.PathPrefix("/cmd").Subrouter()
-		c.Handle("", AppHandler(h.Command)).Methods(http.MethodGet)
-	*/
 
 	r.AppHandle("/", h.Index).Methods(http.MethodGet)
 
@@ -39,5 +30,9 @@ func (r Router) ApplyRouters() {
 	user.AppHandle("/login", h.Login).Methods(http.MethodPost)
 	user.AppHandle("/signup", h.SignUp).Methods(http.MethodPost)
 	// user.HandleFunc("/register", h.RegisterAccount).Methods(http.MethodPost)
+
+	a := r.Group("/auth")
+	a.Use(auth.AuthMiddleware)
+	a.AppHandle("/index", h.AuthIndex).Methods(http.MethodGet)
 
 }

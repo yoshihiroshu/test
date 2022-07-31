@@ -1,12 +1,14 @@
 package request
 
 import (
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
 
+	"github.com/yoshi429/test/auth"
 	"github.com/yoshi429/test/cache"
 	"github.com/yoshi429/test/config"
 	"github.com/yoshi429/test/model"
@@ -37,4 +39,8 @@ func (c Context) UnmarshalFromRequest(r *http.Request, i interface{}) error {
 	}
 
 	return json.Unmarshal(body, i)
+}
+
+func (c Context) GetAuthUserID(ctx context.Context) interface{} {
+	return ctx.Value(auth.UserKey)
 }

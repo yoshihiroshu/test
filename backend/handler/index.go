@@ -22,3 +22,8 @@ func (h Handler) TestHandler(w http.ResponseWriter, r *http.Request) error {
 	fmt.Println("UNKOOOOO")
 	return h.Context.JSON(w, http.StatusOK, h.Context)
 }
+
+func (h Handler) AuthIndex(w http.ResponseWriter, r *http.Request) error {
+	id := h.Context.GetAuthUserID(r.Context())
+	return h.Context.JSON(w, http.StatusOK, id)
+}

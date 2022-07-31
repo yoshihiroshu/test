@@ -40,8 +40,8 @@ func (u *User) SetBcryptPassword() error {
 	return nil
 }
 
-func (u *User) VerifyPassword(hash string) error {
-	err := bcrypt.CompareHashAndPassword([]byte(hash), []byte(u.Password))
+func (u *User) VerifyPassword(password string) error {
+	err := bcrypt.CompareHashAndPassword([]byte(u.Password), []byte(password))
 	if err != nil {
 		return err
 	}
@@ -152,27 +152,4 @@ func (u *User) GetByUUID(db *sql.DB) error {
 	u.SetCreateAt(createdAt)
 
 	return nil
-}
-
-func (u *User) GetPasswordByEmail(db *sql.DB) (string, error) {
-	cmd := `SELECT password FROM users WHERE email = $1;`
-
-	stmt, err := db.Prepare(cmd)
-	if err != nil {
-		return "", err
-	}
-	defer stmt.Close()
-
-	row := stmt.QueryRow(u.Email)
-	if err != nil {
-		return "", err
-	}
-
-	var password string
-	err = row.Scan(&password)
-	if err != nil {
-		return "", err
-	}
-
-	return password, nil
 }
